@@ -1,0 +1,65 @@
+metricbeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+metricbeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+# Modules configuration
+metricbeat.modules:
+- module: docker
+  enabled: true
+  period: 10s
+  hosts: ["unix:///var/run/docker.sock"]
+  metricsets:
+    - container
+    - cpu
+    - diskio
+    - healthcheck
+    - info
+    - image
+    - memory
+    - network
+  
+- module: system
+  enabled: true
+  period: 10s
+  processes: ['.*']
+  metricsets:
+    - cpu
+    - load
+    - memory
+    - network
+    - process
+    - process_summary
+    - uptime
+    - socket_summary
+    - core
+    - diskio
+    - filesystem
+    - fsstat
+    - raid
+    - socket
+
+    
+#- module: elasticsearch
+#- module: etcd
+#- module: kibana
+#- module: logstash
+#- module: mongodb
+#- module: nginx
+
+processors:
+  - add_cloud_metadata: ~
+
+output.elasticsearch:
+  protocol: https
+  ssl:
+    verification_mode: none
+    certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
+  hosts: [ {% for node in elasticsearch_cluster_network_addresses %}"{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://{{ node }}:{{ elasticsearch_network_port }}"{% if loop.index != elasticsearch_cluster_network_addresses|length %},{% endif %}{% endfor %} ]
+  username: "${ES_USR}"
+  password: "${ES_PWD}"

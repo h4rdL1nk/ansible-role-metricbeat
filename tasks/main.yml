@@ -1,0 +1,68 @@
+---
+
+- name: Create metricbeat directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    recurse: True
+  with_items:
+    - "{{ metricbeat_config_dir }}"
+    - "{{ metricbeat_data_dir }}"
+
+- name: Copy SSL certificates
+  copy:
+    src: "{{ lookup('env', 'PWD') }}/{{ elasticsearch_local_certificates_dir|default('files/elasticsearch/certificates')}}/{{ item }}"
+    dest: "{{ metricbeat_config_dir }}/{{ item }}"
+  with_items:
+    - "{{ elasticsearch_certificate_ca_file_ingest }}"
+    - "{{ elasticsearch_certificate_ca_file_monitoring }}"
+
+- name: Copy metricbeat configuration
+  template:
+    src: metricbeat.j2
+    dest: "{{ metricbeat_config_dir }}/metricbeat.yml"
+  register: metricbeat_config
+
+- name: Create metricbeat keystore
+  command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} keystore create"
+  args:
+    creates: "{{ metricbeat_data_dir }}/metricbeat.keystore"
+  register: keystore_create
+
+- name: Load metricbeat secrets
+  include_vars:
+    file: "{{ lookup('env', 'PWD') }}/{{ metricbeat_secrets_file|default('vault/secrets.yml')}}"
+
+- name: Add metricbeat keystore keys
+  command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} keystore add {{ item.key }} --stdin --force"
+  args:
+    stdin: "{{ item.value }}"
+  with_dict: "{{ secrets.metricbeat }}"
+  when: keystore_create.changed
+
+- name: Deploy filebeat containers
+  docker_container:
+    state: started
+    restart: "{{ metricbeat_config.changed or keystore_create.changed }}"
+    name: "smd_infra_metricbeat"
+    user: root
+    image: "{{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }}"
+    detach: true
+    restart_policy: unless-stopped
+    log_driver: json-file
+    log_options:
+      max-size: '30m'
+      max-file: '3'
+    labels:
+      SERVICE_TYPE: metricbeat 
+      SERVICE_OWNER: infra
+      SERVICE_LABEL: clusterpre
+    volumes:
+      - "{{ metricbeat_config_dir }}/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro,Z"
+      - "{{ metricbeat_config_dir }}/{{ elasticsearch_certificate_ca_file_ingest }}:/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}:ro,Z"
+      - "{{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
+      - "proc:/hostfs/proc:ro"
+      - "/:/hostfs:ro"
+    command: "metricbeat -e -E name={{ ansible_hostname }}"
