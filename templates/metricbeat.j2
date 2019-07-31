@@ -63,3 +63,10 @@ output.elasticsearch:
   hosts: [ {% for node in elasticsearch_cluster_network_addresses %}"{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://{{ node }}:{{ elasticsearch_network_port }}"{% if loop.index != elasticsearch_cluster_network_addresses|length %},{% endif %}{% endfor %} ]
   username: "${ES_USR}"
   password: "${ES_PWD}"
+
+setup:
+  kibana.host: "{{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }}"
+  kibana.protocol: "http"
+  kibana.username: elastic 
+  kibana.password:
+
