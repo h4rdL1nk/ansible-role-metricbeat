@@ -41,7 +41,7 @@
   when: keystore_create.changed
 
 - name: Create metricbeat dashboards
-  command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z -v {{ metricbeat_config_dir }}/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro,Z -v {{ metricbeat_config_dir }}/{{ elasticsearch_certificate_ca_file_ingest }}:/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}:ro,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} setup -E setup.kibana.host={{ kibana_cluster_network_addresses }}{{ kibana_network_port }} -E setup.kibana.protocol=http -E setup.kibana.username=elastic -E setup.kibana.password={{ secrets.elasticsearch.users.elastic }} --dashboards"
+  command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z -v {{ metricbeat_config_dir }}/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro,Z -v {{ metricbeat_config_dir }}/{{ elasticsearch_certificate_ca_file_ingest }}:/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}:ro,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} setup -E setup.kibana.host={{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }} -E setup.kibana.protocol=http -E setup.kibana.username=elastic -E setup.kibana.password={{ secrets.elasticsearch.users.elastic }} --dashboards"
   run_once: true
   when: keystore_create.changed and not inventory_hostname in groups[kibana_group] and metricbeat_setup_dashboards
 
