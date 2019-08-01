@@ -5,3 +5,4 @@ metricbeat_docker_tag: 7.2.0
 metricbeat_config_dir: /var/dockershared/metricbeat/config
 metricbeat_data_dir: /var/dockershared/metricbeat/data
 metricbeat_secrets_file: vault/secrets.yml
+metricbeat_setup_dashboards: false
