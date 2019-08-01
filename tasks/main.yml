@@ -45,7 +45,7 @@
   run_once: true
   when: keystore_create.changed and not inventory_hostname in groups[kibana_group] and metricbeat_setup_dashboards
 
-- name: Deploy filebeat containers
+- name: Deploy metricbeat containers
   docker_container:
     state: started
     restart: "{{ metricbeat_config.changed or keystore_create.changed }}"
