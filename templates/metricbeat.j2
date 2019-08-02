@@ -81,6 +81,10 @@ processors:
   - add_cloud_metadata: ~
 
 setup:
+  kibana.host: "{{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }}"
+  kibana.protocol: "http"
+  kibana.username: elastic 
+  kibana.password:
   template:
     enabled: {{ metricbeat_setup_template }}
     name: "metricbeat-%{[agent.version]}"
@@ -98,10 +102,4 @@ output.elasticsearch:
   username: "${ES_USR}"
   password: "${ES_PWD}"
 {% endif %}
-
-setup:
-  kibana.host: "{{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }}"
-  kibana.protocol: "http"
-  kibana.username: elastic 
-  kibana.password:
 
