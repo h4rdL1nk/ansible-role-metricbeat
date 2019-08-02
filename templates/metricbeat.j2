@@ -14,7 +14,7 @@ metricbeat.autodiscover:
           config:
             - module: mongodb
               period: 5s
-              metricsets: ["dbstats", "status", "collstats", "metrics", "replstatus"]
+              metricsets: ["status","replstatus"]
               hosts: "${data.host}:30017"
         - condition:
             equals:
@@ -22,7 +22,7 @@ metricbeat.autodiscover:
           config:
             - module: mongodb
               period: 5s
-              metricsets: ["dbstats", "status", "collstats", "metrics", "replstatus"]
+              metricsets: ["status","replstatus"]
               hosts: "${data.host}:29017"
         - condition:
             equals:
