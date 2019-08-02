@@ -80,14 +80,24 @@ metricbeat.modules:
 processors:
   - add_cloud_metadata: ~
 
+setup:
+  template:
+    enabled: {{ metricbeat_setup_template }}
+    name: "metricbeat-%{[agent.version]}"
+    pattern: "metricbeat-*"
+
+{% if metricbeat_output_elasticsearch %}
 output.elasticsearch:
+  enabled: {{ metricbeat_output_elasticsearch }}
   protocol: https
   ssl:
     verification_mode: none
     certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
   hosts: [ {% for node in elasticsearch_cluster_network_addresses %}"{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://{{ node }}:{{ elasticsearch_network_port }}"{% if loop.index != elasticsearch_cluster_network_addresses|length %},{% endif %}{% endfor %} ]
+  index: "metricbeat-%{+yyyy.MM.dd}"
   username: "${ES_USR}"
   password: "${ES_PWD}"
+{% endif %}
 
 setup:
   kibana.host: "{{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }}"
