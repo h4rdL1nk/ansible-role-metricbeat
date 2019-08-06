@@ -89,9 +89,8 @@ setup:
     #name: "metricbeat-%{[agent.version]}"
     #pattern: "metricbeat-*"
 
-{% if metricbeat_output_elasticsearch %}
 output.elasticsearch:
-  enabled: {{ metricbeat_output_elasticsearch }}
+  enabled: {{ metricbeat_output_elasticsearch and not metric_output_logstash }}
   protocol: https
   ssl:
     verification_mode: none
@@ -100,5 +99,11 @@ output.elasticsearch:
   #index: "metricbeat-%{[agent.version]}-%{+yyyy.MM.dd}"
   username: "${ES_USR}"
   password: "${ES_PWD}"
-{% endif %}
 
+output.logstash:
+  enabled: {{ metricbeat_output_logstash }}
+  loadbalance: true
+  hosts: [ {% for node in logstash_cluster_network_addresses %}"{{ node }}:{{ logstash_network_port }}"{% if loop.index != logstash_cluster_network_addresses|length %},{% endif %}{% endfor %} ]
+  #index: "filebeat-%{+yyyy.MM.dd}"
+  ssl.verification_mode: none
+  ssl.certificate_authorities: ["/usr/share/filebeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
