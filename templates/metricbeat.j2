@@ -96,7 +96,7 @@ setup:
     pattern: "metricbeat-*"
 
 output.elasticsearch:
-  enabled: {{ metricbeat_output_elasticsearch and not metric_output_logstash }}
+  enabled: {{ metricbeat_output_elasticsearch and not metricbeat_output_logstash }}
   protocol: https
   ssl:
     verification_mode: none
