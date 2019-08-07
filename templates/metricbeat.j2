@@ -84,10 +84,16 @@ setup:
   kibana.protocol: "http"
   kibana.username: elastic 
   kibana.password:
+  ilm:
+    enabled: {{ metricbeat_setup_ilm }}
+    pattern: "metricbeat-*"
+  dashboards:
+    enabled: {{ metricbeat_setup_dashboards }}
+    index: "metricbeat-*"
   template:
     enabled: {{ metricbeat_setup_template }}
-    #name: "metricbeat-%{[agent.version]}"
-    #pattern: "metricbeat-*"
+    name: "metricbeat-%{[agent.version]}"
+    pattern: "metricbeat-*"
 
 output.elasticsearch:
   enabled: {{ metricbeat_output_elasticsearch and not metric_output_logstash }}
@@ -96,7 +102,7 @@ output.elasticsearch:
     verification_mode: none
     certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
   hosts: [ {% for node in elasticsearch_cluster_network_addresses %}"{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://{{ node }}:{{ elasticsearch_network_port }}"{% if loop.index != elasticsearch_cluster_network_addresses|length %},{% endif %}{% endfor %} ]
-  #index: "metricbeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+  index: "metricbeat-%{[agent.version]}-%{+yyyy.MM.dd}"
   username: "${ES_USR}"
   password: "${ES_PWD}"
 

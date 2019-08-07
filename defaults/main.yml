@@ -5,6 +5,7 @@ metricbeat_docker_tag: 7.2.0
 metricbeat_config_dir: /var/dockershared/metricbeat/config
 metricbeat_data_dir: /var/dockershared/metricbeat/data
 metricbeat_secrets_file: vault/secrets.yml
+metricbeat_setup_ilm: false
 metricbeat_setup_dashboards: false
 metricbeat_setup_template: true
 metricbeat_output_elasticsearch: true
