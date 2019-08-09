@@ -110,6 +110,6 @@ output.logstash:
   enabled: {{ metricbeat_output_logstash }}
   loadbalance: true
   hosts: [ {% for node in logstash_cluster_network_addresses %}"{{ node }}:{{ logstash_network_port }}"{% if loop.index != logstash_cluster_network_addresses|length %},{% endif %}{% endfor %} ]
-  #index: "filebeat-%{+yyyy.MM.dd}"
+  #index: "metricbeat-%{+yyyy.MM.dd}"
   ssl.verification_mode: none
-  ssl.certificate_authorities: ["/usr/share/filebeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
+  ssl.certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
