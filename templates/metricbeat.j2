@@ -114,3 +114,12 @@ output.logstash:
   ssl:
     verification_mode: none
     certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
+
+xpack.monitoring:
+  enabled: {{ metricbeat_monitoring_enable }} 
+  elasticsearch:
+    hosts: [ {% for node in metricbeat_elasticsearch_monitoring_hosts %}"{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://{{ node }}:{{ elasticsearch_network_port }}"{% if loop.index != metricbeat_elasticsearch_monitoring_hosts|length %},{% endif %}{% endfor %} ]
+    username: "${ES_MONITORING_USER}"
+    password: "${ES_MONITORING_PASS}"
+    ssl:
+      certificate_authorities: "/usr/share/filebeat/{{ elasticsearch_certificate_ca_file_ingest }}"
