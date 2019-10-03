@@ -62,7 +62,7 @@
     labels:
       SERVICE_TYPE: metricbeat 
       SERVICE_OWNER: infra
-      SERVICE_LABEL: clusterpre
+      SERVICE_LABEL: "{{ metricbeat_cluster_name }}" 
     volumes:
       - "{{ metricbeat_config_dir }}/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro,Z"
       - "{{ metricbeat_config_dir }}/{{ elasticsearch_certificate_ca_file_ingest }}:/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}:ro,Z"
