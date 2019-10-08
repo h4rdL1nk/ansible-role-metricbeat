@@ -82,7 +82,7 @@ processors:
 setup:
   kibana.host: "{{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }}"
   kibana.protocol: "http"
-  kibana.username: ${KIBANA_SETUP_USER} 
+  kibana.username: "${KIBANA_SETUP_USER}"
   kibana.password: "${KIBANA_SETUP_PASS}"
   ilm:
     enabled: {{ metricbeat_setup_ilm }}
