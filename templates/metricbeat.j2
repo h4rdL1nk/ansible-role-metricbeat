@@ -80,10 +80,11 @@ processors:
   - add_cloud_metadata: ~
 
 setup:
-  kibana.host: "{{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }}"
-  kibana.protocol: "http"
-  kibana.username: "${KIBANA_SETUP_USER}"
-  kibana.password: "${KIBANA_SETUP_PASS}"
+  kibana:
+    host: "{{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }}"
+    protocol: "http"
+    username: "${KIBANA_SETUP_USER}"
+    password: "${KIBANA_SETUP_PASS}"
   ilm:
     enabled: {{ metricbeat_setup_ilm }}
     pattern: "metricbeat-*"
