@@ -94,7 +94,7 @@ setup:
   template:
     enabled: {{ metricbeat_setup_template }}
     name: "metricbeat-%{[agent.version]}"
-    pattern: "metricbeat-*"
+    pattern: "metricbeat-%{[agent.version]}-*"
 
 output.elasticsearch:
   enabled: {{ metricbeat_output_elasticsearch and not metricbeat_output_logstash }}
