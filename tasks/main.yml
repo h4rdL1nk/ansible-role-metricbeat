@@ -45,18 +45,18 @@
   command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z -v {{ metricbeat_config_dir }}/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro,Z -v {{ metricbeat_config_dir }}/{{ elasticsearch_certificate_ca_file_ingest }}:/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}:ro,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} setup -E output.logstash.enabled=false -E output.elasticsearch.enabled=true -E output.elasticsearch.protocol=https -E output.elasticsearch.username=elastic -E output.elasticsearch.password={{ secrets.elasticsearch.users.elastic }} --template"
   run_once: True 
   ignore_errors: True 
-  when: keystore_create.changed and not inventory_hostname in groups[kibana_group] and metricbeat_setup_template and not metricbeat_output_elasticsearch
+  when: metricbeat_setup_template and not metricbeat_output_elasticsearch
 
 - name: Create metricbeat ilm policy 
   command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z -v {{ metricbeat_config_dir }}/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro,Z -v {{ metricbeat_config_dir }}/{{ elasticsearch_certificate_ca_file_ingest }}:/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}:ro,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} setup -E output.logstash.enabled=false -E output.elasticsearch.enabled=true -E output.elasticsearch.protocol=https -E output.elasticsearch.username=elastic -E output.elasticsearch.password={{ secrets.elasticsearch.users.elastic }} --ilm-policy"
   run_once: True 
   ignore_errors: True 
-  when: keystore_create.changed and not inventory_hostname in groups[kibana_group] and metricbeat_setup_ilm and not metricbeat_output_elasticsearch
+  when: metricbeat_setup_ilm and not metricbeat_output_elasticsearch
 
 - name: Create metricbeat dashboards
   command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z -v {{ metricbeat_config_dir }}/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro,Z -v {{ metricbeat_config_dir }}/{{ elasticsearch_certificate_ca_file_ingest }}:/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}:ro,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} setup -E setup.kibana.host={{ kibana_cluster_network_addresses[0] }}:{{ kibana_network_port }} -E setup.kibana.protocol=http -E setup.kibana.username=elastic -E setup.kibana.password={{ secrets.elasticsearch.users.elastic }} --dashboards"
   run_once: true
-  when: keystore_create.changed and not inventory_hostname in groups[kibana_group] and metricbeat_setup_dashboards
+  when: metricbeat_setup_dashboards
 
 - name: Deploy metricbeat containers
   docker_container:
