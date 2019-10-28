@@ -10,6 +10,15 @@ metricbeat.autodiscover:
       templates:
         - condition:
             equals:
+              docker.container.labels.SERVICE_TYPE: logstash
+          config:
+            - module: logstash
+              period: 10s
+              enabled: true
+              metricsets: ["node","node_stats"]
+              hosts: "${data.host}:9600"
+        - condition:
+            equals:
               docker.container.labels.SERVICE_LABEL: ds1_gold
           config:
             - module: mongodb
