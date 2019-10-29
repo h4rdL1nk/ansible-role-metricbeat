@@ -17,10 +17,6 @@ metricbeat.autodiscover:
               enabled: true
               metricsets: ["node","node_stats"]
               hosts: "${data.host}:9600"
-        - condition:
-            equals:
-              docker.container.labels.SERVICE_TYPE: logstash
-          config:
             - module: http
               period: 10s
               enabled: true
