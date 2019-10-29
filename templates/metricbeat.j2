@@ -19,6 +19,17 @@ metricbeat.autodiscover:
               hosts: "${data.host}:9600"
         - condition:
             equals:
+              docker.container.labels.SERVICE_TYPE: logstash
+          config:
+            - module: http
+              period: 10s
+              enabled: true
+              metricsets: ["json"]
+              path: "/_node/stats/pipelines"
+              namespace: "logstash_json_pipelines"
+              hosts: "${data.host}:9600"
+        - condition:
+            equals:
               docker.container.labels.SERVICE_LABEL: ds1_gold
           config:
             - module: mongodb
