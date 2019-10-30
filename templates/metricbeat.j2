@@ -23,6 +23,7 @@ metricbeat.autodiscover:
               metricsets: ["json"]
               path: "/_node/stats/pipelines"
               namespace: "logstash_json_pipelines"
+              dedot.enabled: true
               hosts: "${data.host}:9600"
         - condition:
             equals:
