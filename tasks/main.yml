@@ -81,7 +81,7 @@
       - "{{ metricbeat_config_dir }}/{{ elasticsearch_certificate_ca_file_ingest }}:/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}:ro,Z"
       - "{{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro,z"
+      - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
       - "proc:/hostfs/proc:ro"
       - "/:/hostfs:ro"
     command: "metricbeat -e -E name={{ ansible_hostname }}"
