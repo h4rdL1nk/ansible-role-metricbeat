@@ -15,3 +15,4 @@ metricbeat_output_elasticsearch: true
 metricbeat_output_logstash: false
 metricbeat_monitoring_enable: false
 metricbeat_force_keystore_write: false
+metricbeat_logging_level: info
