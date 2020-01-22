@@ -54,7 +54,7 @@ metricbeat.autodiscover:
 metricbeat.modules:
 - module: docker
   enabled: true
-  period: 10s
+  period: {{ metricbeat_module_docker_period }} 
   hosts: ["unix:///var/run/docker.sock"]
   metricsets:
     - container
@@ -68,7 +68,7 @@ metricbeat.modules:
   
 - module: system
   enabled: true
-  period: 10s
+  period: {{ metricbeat_module_system_period }}
   processes: ['.*']
   metricsets:
     - cpu
