@@ -52,40 +52,24 @@ metricbeat.autodiscover:
 
 # Modules configuration
 metricbeat.modules:
-- module: docker
-  enabled: true
-  period: {{ metricbeat_module_docker_period }} 
-  hosts: ["unix:///var/run/docker.sock"]
-  metricsets:
-    - container
-    - cpu
-    - diskio
-    - healthcheck
-    - info
-    - image
-    - memory
-    - network
-  
-- module: system
-  enabled: true
-  period: {{ metricbeat_module_system_period }}
-  processes: ['.*']
-  metricsets:
-    - cpu
-    - load
-    - memory
-    - network
-    - process
-    - process_summary
-    - uptime
-    - socket_summary
-    - core
-    - diskio
-    - filesystem
-    - fsstat
-    - socket
+  - module: docker
+    enabled: true
+    period: {{ metricbeat_module_docker_period }} 
+    hosts: ["unix:///var/run/docker.sock"]
+    metricsets:
+    {% for ms in metricbeat_module_docker_metricsets %}
+      - {{ ms }}
+    {% endfor %}
 
-    
+  - module: system
+    enabled: true
+    period: {{ metricbeat_module_system_period }}
+    processes: ['.*']
+    metricsets:
+    {% for ms in metricbeat_module_system_metricsets %}
+      - {{ ms }}
+    {% endfor %}
+
 #- module: elasticsearch
 #- module: etcd
 #- module: kibana
