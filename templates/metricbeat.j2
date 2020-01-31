@@ -58,7 +58,7 @@ metricbeat.modules:
     hosts: ["unix:///var/run/docker.sock"]
     metricsets:
     {% for ms in metricbeat_module_docker_metricsets %}
-      - {{ ms }}
+  - {{ ms }}
     {% endfor %}
 
   - module: system
@@ -67,7 +67,7 @@ metricbeat.modules:
     processes: ['.*']
     metricsets:
     {% for ms in metricbeat_module_system_metricsets %}
-      - {{ ms }}
+  - {{ ms }}
     {% endfor %}
 
 #- module: elasticsearch
