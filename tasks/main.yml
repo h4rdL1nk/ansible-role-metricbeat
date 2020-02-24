@@ -87,7 +87,7 @@
 - name: Deploy metricbeat containers
   docker_container:
     state: started
-    restart: "{{ metricbeat_config.changed or keystore_create.changed or keystore_write.changed }}"
+    restart: "{{ metricbeat_config is defined and metricbeat_config.changed) or (keystore_create is defined and keystore_create.changed) or (keystore_write is defined and keystore_write.changed) }}"
     name: "smd_infra_metricbeat"
     user: root
     image: "{{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }}"
