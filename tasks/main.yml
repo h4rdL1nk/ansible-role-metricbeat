@@ -38,10 +38,16 @@
   args:
     creates: "{{ metricbeat_data_dir }}/metricbeat.keystore"
   register: keystore_create
+  tags:
+    - configuration
+    - files
+    - keystore
 
 - name: Load metricbeat secrets
   include_vars:
     file: "{{ lookup('env', 'PWD') }}/{{ metricbeat_secrets_file|default('vault/secrets.yml')}}"
+  tags:
+    - configuration
 
 - name: Add metricbeat keystore keys
   command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} keystore add {{ item.key }} --stdin --force"
