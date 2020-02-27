@@ -116,6 +116,6 @@
       - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
       - "proc:/hostfs/proc:ro"
       - "/:/hostfs:ro"
-    command: "metricbeat -e -E name={{ ansible_hostname }}"
+    command: "metricbeat -e -system.hostfs=/hostfs -E name={{ ansible_hostname }}"
   tags:
     - deploy
