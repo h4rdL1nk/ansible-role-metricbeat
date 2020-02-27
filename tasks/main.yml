@@ -98,6 +98,7 @@
     user: root
     image: "{{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }}"
     detach: true
+    network_mode: host
     restart_policy: unless-stopped
     security_opts: "{{ metricbeat_docker_security_opts }}" 
     log_driver: json-file
