@@ -101,6 +101,9 @@
     network_mode: host
     restart_policy: unless-stopped
     security_opts: "{{ metricbeat_docker_security_opts }}" 
+    capabilities:
+      - sys_ptrace
+      - dac_read_search
     log_driver: json-file
     log_options:
       max-size: '30m'
