@@ -117,7 +117,7 @@ output.logstash:
     verification_mode: none
     certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
 
-{% if filebeat_monitoring_enable %}
+{% if metricbeat_monitoring_enable %}
 monitoring:
   enabled: {{ metricbeat_monitoring_enable }} 
   elasticsearch:
