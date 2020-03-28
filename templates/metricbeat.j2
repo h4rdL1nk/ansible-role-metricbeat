@@ -10,6 +10,24 @@ metricbeat.autodiscover:
       templates:
         - condition:
             equals:
+              docker.container.labels.SERVICE_TYPE: elasticsearch 
+          config:
+            - module: elasticsearch 
+              period: 10s
+              enabled: true
+              metricsets:
+               - ccr
+               - cluster_stats
+               - index
+               - index_recovery
+               - index_summary
+               - ml_job
+               - node_stats
+               - shard
+              hosts: "${data.host}:9200"
+              xpack.enabled: true
+        - condition:
+            equals:
               docker.container.labels.SERVICE_TYPE: kibana 
           config:
             - module: kibana 
@@ -17,7 +35,7 @@ metricbeat.autodiscover:
               enabled: true
               metricsets:
                - stats
-              hosts: "${data.host}:9600"
+              hosts: "${data.host}:5601"
               xpack.enabled: true
         - condition:
             equals:
