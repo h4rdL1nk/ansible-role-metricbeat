@@ -22,3 +22,10 @@ metricbeat_module_docker_metricsets: ["container","cpu","diskio","healthcheck","
   
 metricbeat_module_system_period: 10s
 metricbeat_module_system_metricsets: ["cpu","load","memory","network","process","process_summary","uptime","socket_summary","core","diskio","filesystem","fsstat","socket"]
+
+metricbeat_monitoring_elasticsearch_http_port: 9200
+metricbeat_monitoring_kibana_http_port: 5601
+metricbeat_monitoring_logstash_http_port: 9600
+metricbeat_monitoring_filebeat_http_port: 9600
+metricbeat_monitoring_metricbeat_http_port: 9600
+metricbeat_monitoring_heartbeat_http_port: 9600

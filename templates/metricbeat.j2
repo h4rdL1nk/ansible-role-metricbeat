@@ -24,7 +24,7 @@ metricbeat.autodiscover:
                - ml_job
                - node_stats
                - shard
-              hosts: "${data.host}:9200"
+              hosts: "${data.host}:{{ metricbeat_monitoring_elasticsearch_http_port }}"
               xpack.enabled: true
         - condition:
             equals:
@@ -35,7 +35,7 @@ metricbeat.autodiscover:
               enabled: true
               metricsets:
                - stats
-              hosts: "${data.host}:5601"
+              hosts: "${data.host}:{{ metricbeat_monitoring_kibana_http_port }}"
               xpack.enabled: true
         - condition:
             equals:
@@ -47,7 +47,7 @@ metricbeat.autodiscover:
               metricsets:
                - stats
                - state
-              hosts: "${data.host}:9600"
+              hosts: "${data.host}:{{ metricbeat_monitoring_filebeat_http_port }}"
         - condition:
             equals:
               docker.container.labels.SERVICE_TYPE: logstash
@@ -56,7 +56,8 @@ metricbeat.autodiscover:
               period: 10s
               enabled: true
               metricsets: ["node","node_stats"]
-              hosts: "${data.host}:9600"
+              hosts: "${data.host}:{{ metricbeat_monitoring_logstash_http_port }}"
+              xpack.enabled: true
             - module: http
               period: 10s
               enabled: true
@@ -64,7 +65,7 @@ metricbeat.autodiscover:
               path: "/_node/stats/pipelines"
               namespace: "logstash_json_pipelines"
               dedot.enabled: true
-              hosts: "${data.host}:9600"
+              hosts: "${data.host}:{{ metricbeat_monitoring_logstash_http_port }}"
         - condition:
             equals:
               docker.container.labels.SERVICE_LABEL: ds1_gold
