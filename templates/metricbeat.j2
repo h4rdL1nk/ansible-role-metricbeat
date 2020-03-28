@@ -14,7 +14,6 @@ metricbeat.autodiscover:
           config:
             - module: elasticsearch 
               period: 10s
-              xpack.enabled: true
               metricsets:
                - ccr
                - enrich
@@ -26,49 +25,52 @@ metricbeat.autodiscover:
                - node_stats
                - shard
               hosts: "{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://${data.host}:{{ metricbeat_monitoring_elasticsearch_http_port }}"
+              ssl:
+                certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"] 
               username: "${ES_USR}"
               password: "${ES_PWD}"
+              xpack.enabled: true
         - condition:
             equals:
               docker.container.labels.SERVICE_TYPE: kibana 
           config:
             - module: kibana 
               period: 10s
-              xpack.enabled: true
               metricsets:
                - stats
               hosts: "${data.host}:{{ metricbeat_monitoring_kibana_http_port }}"
+              xpack.enabled: true
         - condition:
             equals:
               docker.container.labels.SERVICE_TYPE: filebeat
           config:
             - module: beat
               period: 10s
-              enabled: true
               metricsets:
                - stats
                - state
               hosts: "${data.host}:{{ metricbeat_monitoring_filebeat_http_port }}"
+              xpack.enabled: true
         - condition:
             equals:
               docker.container.labels.SERVICE_TYPE: metricbeat
           config:
             - module: beat
               period: 10s
-              enabled: true
               metricsets:
                - stats
                - state
               hosts: "${data.host}:{{ metricbeat_monitoring_metricbeat_http_port }}"
+              xpack.enabled: true
         - condition:
             equals:
               docker.container.labels.SERVICE_TYPE: logstash
           config:
             - module: logstash
               period: 10s
-              xpack.enabled: true
               metricsets: ["node","node_stats"]
               hosts: "${data.host}:{{ metricbeat_monitoring_logstash_http_port }}"
+              xpack.enabled: true
             - module: http
               period: 10s
               enabled: true
