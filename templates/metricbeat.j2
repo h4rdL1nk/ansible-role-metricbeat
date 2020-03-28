@@ -10,6 +10,17 @@ metricbeat.autodiscover:
       templates:
         - condition:
             equals:
+              docker.container.labels.SERVICE_TYPE: kibana 
+          config:
+            - module: kibana 
+              period: 10s
+              enabled: true
+              metricsets:
+               - stats
+              hosts: "${data.host}:9600"
+              xpack.enabled: true
+        - condition:
+            equals:
               docker.container.labels.SERVICE_TYPE: filebeat
           config:
             - module: beat
