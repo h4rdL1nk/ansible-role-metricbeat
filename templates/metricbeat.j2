@@ -25,8 +25,7 @@ metricbeat.autodiscover:
                - node_stats
                - shard
               hosts: "{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://${data.host}:{{ metricbeat_monitoring_elasticsearch_http_port }}"
-              ssl:
-                certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"] 
+              ssl.certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
               username: "${ES_USR}"
               password: "${ES_PWD}"
               xpack.enabled: true
