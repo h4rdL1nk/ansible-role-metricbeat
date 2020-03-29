@@ -38,6 +38,8 @@ metricbeat.autodiscover:
               metricsets:
                - stats
               hosts: "${data.host}:{{ metricbeat_monitoring_kibana_http_port }}"
+              username: "${KIBANA_SETUP_USER}"
+              password: "${KIBANA_SETUP_PASS}"
               xpack.enabled: true
         - condition:
             equals:
