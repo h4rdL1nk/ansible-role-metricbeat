@@ -35,18 +35,17 @@
     method: GET
     url_username: elastic
     url_password: "{{ secrets.elasticsearch.users.elastic }}"
-    url: "{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://{{ elasticsearch_cluster_network_addresses[0] }}:{{ elasticsearch_netwo
-rk_port }}"
+    url: "{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://{{ elasticsearch_cluster_network_addresses[0] }}:{{ elasticsearch_network_port }}"
     remote_src: True
     return_content: True
     validate_certs: False
-  when: not metricbeat_output_logstash
+  when: metricbeat_output_logstash
   register: cluster_uuid
   
 - name: Set cluster UUID variable
   set_fact:
     metricbeat_cluster_uuid: "{{ cluster_uuid.json.cluster_uuid }}"
-  when: not metricbeat_output_logstash
+  when: metricbeat_output_logstash
 
 - name: Copy metricbeat configuration
   template:
