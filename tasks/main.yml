@@ -24,6 +24,29 @@
     - files
     - certificates
 
+- name: Load metricbeat secrets
+  include_vars:
+    file: "{{ lookup('env', 'PWD') }}/{{ metricbeat_secrets_file|default('vault/secrets.yml')}}"
+  tags:
+    - configuration
+
+- name: Get elasticsearch cluster UUID
+  uri: 
+    method: GET
+    url_username: elastic
+    url_password: "{{ secrets.elasticsearch.users.elastic }}"
+    url: "{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://{{ elasticsearch_cluster_network_addresses[0] }}:{{ elasticsearch_netwo
+rk_port }}"
+    remote_src: True
+    return_content: True
+    validate_certs: False
+  when: not metricbeat_output_logstash
+  register: cluster_uuid
+  
+- name: Set cluster UUID variable
+  set_fact:
+    metricbeat_cluster_uuid: "{{ cluster_uuid.json.cluster_uuid }}"
+
 - name: Copy metricbeat configuration
   template:
     src: metricbeat.j2
@@ -42,12 +65,6 @@
     - configuration
     - files
     - keystore
-
-- name: Load metricbeat secrets
-  include_vars:
-    file: "{{ lookup('env', 'PWD') }}/{{ metricbeat_secrets_file|default('vault/secrets.yml')}}"
-  tags:
-    - configuration
 
 - name: Add metricbeat keystore keys
   command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} keystore add {{ item.key }} --stdin --force"
