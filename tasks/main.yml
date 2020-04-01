@@ -46,6 +46,7 @@ rk_port }}"
 - name: Set cluster UUID variable
   set_fact:
     metricbeat_cluster_uuid: "{{ cluster_uuid.json.cluster_uuid }}"
+  when: not metricbeat_output_logstash
 
 - name: Copy metricbeat configuration
   template:
