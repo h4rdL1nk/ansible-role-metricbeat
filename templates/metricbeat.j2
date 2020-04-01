@@ -66,6 +66,17 @@ metricbeat.autodiscover:
               xpack.enabled: true
         - condition:
             equals:
+              docker.container.labels.SERVICE_TYPE: heartbeat
+          config:
+            - module: beat
+              period: 10s
+              metricsets:
+               - stats
+               - state
+              hosts: "${data.host}:{{ metricbeat_monitoring_heartbeat_http_port }}"
+              xpack.enabled: true
+        - condition:
+            equals:
               docker.container.labels.SERVICE_TYPE: logstash
           config:
             - module: logstash
