@@ -39,13 +39,14 @@ metricbeat.autodiscover:
             equals:
               docker.container.labels.SERVICE_TYPE: kibana 
           config:
-            - module: kibana 
-              period: 10s
+            - module: kibana
               metricsets:
-               - stats
-              hosts: "${data.host}:{{ metricbeat_monitoring_kibana_http_port }}"
+                - stats
+              period: 10s
+              hosts: ["${data.host}:{{ metricbeat_monitoring_kibana_http_port }}"]
+              #basepath: ""
               username: "${KIBANA_SETUP_USER}"
-              password: "${KIBANA_SETUP_PASS}"
+              username: "${KIBANA_SETUP_USER}"
               xpack.enabled: true
         - condition:
             equals:
