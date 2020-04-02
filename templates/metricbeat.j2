@@ -32,8 +32,11 @@ metricbeat.autodiscover:
               hosts: "{% if elasticsearch_security_http_enabled %}https{% else %}http{% endif %}://${data.host}:{{ metricbeat_monitoring_elasticsearch_http_port }}"
               ssl.certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
               ssl.verification_mode: none
-              username: "${ES_USR}"
-              password: "${ES_PWD}"
+              # Secrets from keystore noy allowed in version 7.6.x
+              #username: "${ES_USR}"
+              #password: "${ES_PWD}"
+              username: "elastic"
+              password: "{{ secrets.elasticsearch.users.elastic }}"
               xpack.enabled: true
         - condition:
             equals:
@@ -45,8 +48,11 @@ metricbeat.autodiscover:
               period: 10s
               hosts: ["${data.host}:{{ metricbeat_monitoring_kibana_http_port }}"]
               #basepath: ""
-              username: "${KIBANA_SETUP_USER}"
-              username: "${KIBANA_SETUP_USER}"
+              # Secrets from keystore noy allowed in version 7.6.x
+              #username: "${KIBANA_SETUP_USER}"
+              #password: "${KIBANA_SETUP_USER}"
+              username: elastic
+              password: "{{ secrets.elasticsearch.users.elastic }}"
               xpack.enabled: true
         - condition:
             equals:
