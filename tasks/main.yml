@@ -39,13 +39,13 @@
     remote_src: True
     return_content: True
     validate_certs: False
-  when: metricbeat_output_logstash
+  when: metricbeat_set_cluster_uuid
   register: cluster_uuid
   
 - name: Set cluster UUID variable
   set_fact:
     metricbeat_cluster_uuid: "{{ cluster_uuid.json.cluster_uuid }}"
-  when: metricbeat_output_logstash
+  when: metricbeat_set_cluster_uuid
 
 - name: Copy metricbeat configuration
   template:

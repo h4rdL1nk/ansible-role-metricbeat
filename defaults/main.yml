@@ -8,6 +8,7 @@ metricbeat_config_dir: /var/dockershared/metricbeat/config
 metricbeat_data_dir: /var/dockershared/metricbeat/data
 metricbeat_cluster_name: default
 metricbeat_cluster_uuid: dummy
+metricbeat_set_cluster_uuid: true
 metricbeat_secrets_file: vault/secrets.yml
 metricbeat_setup_ilm: false
 metricbeat_setup_dashboards: false
