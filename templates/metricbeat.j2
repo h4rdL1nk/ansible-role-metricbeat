@@ -35,8 +35,8 @@ metricbeat.autodiscover:
               # Secrets from keystore noy allowed in version 7.6.x
               #username: "${ES_USR}"
               #password: "${ES_PWD}"
-              username: "elastic"
-              password: "{{ secrets.elasticsearch.users.elastic }}"
+              username: "{{ secrets.elasticsearch.monitoring.user }}"
+              password: "{{ secrets.elasticsearch.monitoring.pass }}"
               xpack.enabled: true
         - condition:
             equals:
@@ -51,8 +51,8 @@ metricbeat.autodiscover:
               # Secrets from keystore noy allowed in version 7.6.x
               #username: "${KIBANA_SETUP_USER}"
               #password: "${KIBANA_SETUP_USER}"
-              username: elastic
-              password: "{{ secrets.elasticsearch.users.elastic }}"
+              username: "{{ secrets.elasticsearch.monitoring.user }}"
+              password: "{{ secrets.elasticsearch.monitoring.pass }}" 
               xpack.enabled: true
         - condition:
             equals:
