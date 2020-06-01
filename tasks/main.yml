@@ -71,7 +71,7 @@
   command: "docker run --rm -i -v {{ metricbeat_data_dir }}:/usr/share/metricbeat/data:rw,Z --user root {{ metricbeat_docker_image }}:{{ metricbeat_docker_tag }} keystore add {{ item.key }} --stdin --force"
   args:
     stdin: "{{ item.value }}"
-  with_dict: "{{ secrets.metricbeat }}"
+  with_dict: "{{ secrets.metricbeat_keystore_keys }}"
   when: keystore_create.changed or metricbeat_force_keystore_write
   register: keystore_write
   tags:
