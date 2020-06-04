@@ -2,6 +2,7 @@
 
 metricbeat_docker_image: registry.smartdigits.io/infra/metricbeat
 metricbeat_docker_tag: 7.2.0
+metricbeat_docker_api_version: 1.22
 metricbeat_docker_security_opts:
   - label:type:container_runtime_t
 metricbeat_config_dir: /var/dockershared/metricbeat/config
