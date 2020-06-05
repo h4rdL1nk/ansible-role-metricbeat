@@ -36,3 +36,7 @@ metricbeat_monitoring_logstash_http_port: 9600
 metricbeat_monitoring_filebeat_http_port: 9600
 metricbeat_monitoring_metricbeat_http_port: 9600
 metricbeat_monitoring_heartbeat_http_port: 9600
+
+metricbeat_logstash_client_auth_enabled: false
+metricbeat_logstash_auth_certificate: instance.crt
+metricbeat_logstash_auth_key: instance.key
