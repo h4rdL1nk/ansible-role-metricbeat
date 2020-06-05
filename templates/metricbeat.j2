@@ -196,8 +196,8 @@ output.logstash:
     verification_mode: none
     certificate_authorities: ["/usr/share/metricbeat/{{ elasticsearch_certificate_ca_file_ingest }}"]
 {% if metricbeat_logstash_client_auth_enabled == "true" %}
-    certificate: "/usr/share/filebeat/{{ metricbeat_logstash_auth_certificate }}"
-    key: "/usr/share/filebeat/{{ metricbeat_logstash_auth_key }}"
+    certificate: "/usr/share/metricbeat/{{ metricbeat_logstash_auth_certificate }}"
+    key: "/usr/share/metricbeat/{{ metricbeat_logstash_auth_key }}"
 {% endif %}
 
 {% if metricbeat_monitoring_enable %}
